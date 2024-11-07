@@ -1,7 +1,6 @@
 package store.view;
 
-import java.util.List;
-import store.domain.product.Product;
+import store.domain.product.Products;
 
 public class OutputView {
     private static final String NEW_LINE = System.lineSeparator();
@@ -14,9 +13,8 @@ public class OutputView {
         System.out.print(NEW_LINE);
     }
 
-    public static void printInventory(List<Product> products) {
-        products.forEach(product -> {
-            System.out.println(product.toString());
-        });
+    public static void printInventory(Products products) {
+        products.getProducts().forEach(System.out::println);
+        System.out.print(NEW_LINE);
     }
 }

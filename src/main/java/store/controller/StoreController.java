@@ -1,8 +1,8 @@
 package store.controller;
 
-import java.util.List;
-import store.domain.product.Product;
 import store.domain.product.ProductFactory;
+import store.domain.product.Products;
+import store.view.InputView;
 import store.view.OutputView;
 
 public class StoreController {
@@ -15,11 +15,13 @@ public class StoreController {
     public void run() {
         OutputView.printWelcomeMessage();
 
-        List<Product> products = productFactory.initProducts();
+        Products products = productFactory.createProducts();
         loadInventory(products);
+
+        InputView.purchaseProducts();
     }
 
-    private void loadInventory(List<Product> products) {
+    private void loadInventory(Products products) {
         OutputView.printInventory(products);
     }
 
