@@ -6,9 +6,14 @@ import store.util.FileLoader;
 
 public class ProductFactory {
     private static final String DELIMITER = ",";
+    private static final String FILE_NAME = "products.md";
 
-    public List<Product> initProducts() {
-        return FileLoader.loadMarkdownFile("products.md")
+    public Products createProducts() {
+        return new Products(initProducts());
+    }
+
+    private List<Product> initProducts() {
+        return FileLoader.loadMarkdownFile(FILE_NAME)
                 .stream()
                 .skip(1)
                 .map(this::getFields)
