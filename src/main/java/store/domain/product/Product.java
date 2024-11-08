@@ -13,14 +13,33 @@ public class Product {
         this.promotion = promotion;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getPromotion() {
+        return promotion;
+    }
+
     @Override
     public String toString() {
         return formatting();
     }
 
     private String formatting() {
-        if (isOutOfStock(quantity))
-            return "- " + name + " " + priceFormatting(price) + " 재고 없음 " + promotion;
+        if (isOutOfStock(quantity)) return outOfStockFormatting();
+        return inStockFormatting();
+    }
+
+    private String outOfStockFormatting() {
+        return "- " + name + " " + priceFormatting(price) + " 재고 없음 " + promotion;
+    }
+
+    private String inStockFormatting() {
         return "- " + name + " " + priceFormatting(price) + " " + quantity + "개 " + promotion;
     }
 
