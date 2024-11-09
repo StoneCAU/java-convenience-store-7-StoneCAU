@@ -21,6 +21,10 @@ public class Product {
         return price;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     public String getPromotion() {
         return promotion;
     }
