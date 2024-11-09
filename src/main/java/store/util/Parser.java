@@ -12,6 +12,8 @@ public class Parser {
     public static List<String> parseItems(String input) {
         validate(input);
 
+        System.out.println(input);
+
         return Stream.of(input.replaceAll("[\\[\\]]", "").split(DELIMITER))
                 .filter(item -> item.matches("[^\\-]+-\\d+"))
                 .collect(Collectors.toList());
@@ -22,6 +24,6 @@ public class Parser {
     }
 
     private static boolean isNotMatch(String input) {
-        return !input.matches("[^\\-]+-\\d+,([^\\-]+-\\d+)*");
+        return !input.matches("\\[[^\\-]+-\\d+](,\\[[^\\-]+-\\d+])*");
     }
 }
