@@ -7,16 +7,21 @@ import java.util.stream.Stream;
 import store.domain.inventory.Inventory;
 import store.domain.product.Product;
 import store.domain.product.ProductFactory;
+import store.domain.promotion.Promotion;
+import store.domain.promotion.PromotionFactory;
 
 public class InventoryService {
     private final ProductFactory productFactory;
+    private final PromotionFactory promotionFactory;
 
-    public InventoryService(ProductFactory productFactory) {
+    public InventoryService(ProductFactory productFactory, PromotionFactory promotionFactory) {
         this.productFactory = productFactory;
+        this.promotionFactory = promotionFactory;
     }
 
     public Inventory getInventory() {
-        List<Product> products = productFactory.initProducts();
+        List<Promotion> promotions = promotionFactory.initPromotions();
+        List<Product> products = productFactory.initProducts(promotions);
         return new Inventory(processProducts(products));
     }
 
@@ -34,7 +39,7 @@ public class InventoryService {
     }
 
     private Product createNormalProduct(Product product) {
-        return new Product(product.getName(), product.getPrice(), 0, "");
+        return new Product(product.getName(), product.getPrice(), 0, "", null);
     }
 
     private Stream<Product> processProduct(Product product, Map<String, Integer> stockMap) {
@@ -47,7 +52,7 @@ public class InventoryService {
 
     private boolean normalProductQuantityIsZero(Product product, Map<String, Integer> stockMap) {
         return stockMap.get(product.getName()) == 1
-                && product.getPromotion() != null
-                && !product.getPromotion().isEmpty();
+                && product.getPromotionName() != null
+                && !product.getPromotionName().isEmpty();
     }
 }
