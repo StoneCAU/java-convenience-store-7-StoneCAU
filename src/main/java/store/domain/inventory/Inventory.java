@@ -15,6 +15,12 @@ public class Inventory {
         return new ArrayList<>(products);
     }
 
+    public List<Product> findProductByName(String name) {
+        return products.stream()
+                .filter(product -> product.getName().equals(name))
+                .toList();
+    }
+
     public boolean isInvalidItem(String name) {
         return products.stream().noneMatch(product -> product.getName().equals(name));
     }
