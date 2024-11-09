@@ -14,4 +14,19 @@ public class Inventory {
     public List<Product> getProducts() {
         return new ArrayList<>(products);
     }
+
+    public boolean isInvalidItem(String name) {
+        return products.stream().noneMatch(product -> product.getName().equals(name));
+    }
+
+    public boolean isExceedQuantity(String name, int quantity) {
+        return findQuantityByName(name) < quantity;
+    }
+
+    private int findQuantityByName(String name) {
+        return products.stream()
+                .filter(product -> product.getName().equals(name))
+                .mapToInt(Product::getQuantity)
+                .sum();
+    }
 }
