@@ -1,4 +1,7 @@
 package store.dto;
 
-public record OrderLine(String name, int quantity) {
+import java.util.List;
+import store.domain.product.Product;
+
+public record OrderLine(List<Product> products, int quantity) {
 }
