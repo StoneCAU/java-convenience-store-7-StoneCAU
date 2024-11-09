@@ -1,12 +1,13 @@
-package store.domain.product;
+package store.domain.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
+import store.domain.product.Product;
 
-public class Products {
+public class Inventory {
     private final List<Product> products;
 
-    public Products(List<Product> products) {
+    public Inventory(List<Product> products) {
         this.products = products;
     }
 
