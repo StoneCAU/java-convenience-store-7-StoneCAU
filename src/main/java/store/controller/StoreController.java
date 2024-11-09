@@ -3,8 +3,6 @@ package store.controller;
 import java.util.List;
 import java.util.function.Supplier;
 import store.domain.inventory.Inventory;
-import store.domain.promotion.Promotion;
-import store.domain.promotion.PromotionFactory;
 import store.dto.Order;
 import store.exception.StoreException;
 import store.service.InventoryService;
@@ -16,19 +14,16 @@ import store.view.OutputView;
 public class StoreController {
     private final InventoryService inventoryService;
     private final OrderService orderService;
-    private final PromotionFactory promotionFactory;
 
-    public StoreController(InventoryService inventoryService, OrderService orderService, PromotionFactory promotionFactory) {
+    public StoreController(InventoryService inventoryService, OrderService orderService) {
         this.inventoryService = inventoryService;
         this.orderService = orderService;
-        this.promotionFactory = promotionFactory;
     }
 
     public void run() {
         OutputView.printWelcomeMessage();
 
         Inventory inventory = inventoryService.getInventory();
-        List<Promotion> promotions = promotionFactory.initPromotions();
         loadInventory(inventory);
 
         Order order = getOrder(inventory);

@@ -9,11 +9,11 @@ import store.service.OrderService;
 public class Application {
     public static void main(String[] args) {
         final ProductFactory productFactory = new ProductFactory();
-        final InventoryService inventoryService = new InventoryService(productFactory);
-        final OrderService orderService = new OrderService();
         final PromotionFactory promotionFactory = new PromotionFactory();
+        final InventoryService inventoryService = new InventoryService(productFactory, promotionFactory);
+        final OrderService orderService = new OrderService();
 
-        StoreController storeController = new StoreController(inventoryService, orderService, promotionFactory);
+        StoreController storeController = new StoreController(inventoryService, orderService);
         storeController.run();
     }
 }
