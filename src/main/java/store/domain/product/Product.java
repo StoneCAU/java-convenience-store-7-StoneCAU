@@ -1,15 +1,19 @@
 package store.domain.product;
 
+import store.domain.promotion.Promotion;
+
 public class Product {
     final String name;
     final int price;
     final int quantity;
-    final String promotion;
+    final String promotionName;
+    final Promotion promotion;
 
-    public Product(String name, int price, int quantity, String promotion) {
+    public Product(String name, int price, int quantity, String promotionName, Promotion promotion) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.promotionName = promotionName;
         this.promotion = promotion;
     }
 
@@ -25,8 +29,8 @@ public class Product {
         return quantity;
     }
 
-    public String getPromotion() {
-        return promotion;
+    public String getPromotionName() {
+        return promotionName;
     }
 
     @Override
