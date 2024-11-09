@@ -29,7 +29,7 @@ public class OrderService {
         int quantity = Integer.parseInt(split[1]);
         validateQuantity(name, quantity, inventory);
 
-        return new OrderLine(name, quantity);
+        return new OrderLine(inventory.findProductByName(name), quantity);
     }
 
     private void validateName(String name, Inventory inventory) {
