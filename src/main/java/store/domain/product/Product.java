@@ -33,6 +33,10 @@ public class Product {
         return promotionName;
     }
 
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
     @Override
     public String toString() {
         return formatting();
@@ -44,11 +48,11 @@ public class Product {
     }
 
     private String outOfStockFormatting() {
-        return "- " + name + " " + priceFormatting(price) + " 재고 없음 " + promotion;
+        return "- " + name + " " + priceFormatting(price) + " 재고 없음 " + promotionName;
     }
 
     private String inStockFormatting() {
-        return "- " + name + " " + priceFormatting(price) + " " + quantity + "개 " + promotion;
+        return "- " + name + " " + priceFormatting(price) + " " + quantity + "개 " + promotionName;
     }
 
     private String priceFormatting(int price) {
