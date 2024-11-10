@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import store.domain.product.Product;
 import store.domain.promotion.Promotion;
+import store.dto.Order;
 import store.dto.OrderLine;
 
 public class Inventory {
@@ -61,6 +62,42 @@ public class Inventory {
                 .orElse(0);
     }
 
+    public void update(Order order, Map<String, Integer> addition) {
+        order.orderLines().forEach(orderLine -> {
+            deductAdditional(orderLine, addition);
+            deductOriginal(orderLine);
+        });
+    }
+
+    private void deductAdditional(OrderLine orderLine, Map<String, Integer> addition) {
+        for (Product product : orderLine.products()) {
+            if (!addition.containsKey(product.getName())) return;
+            if (product.getPromotion() != null &&
+                    quantityIsNotAdded(product, orderLine.quantity(), addition.get(product.getName()))
+            ) return;
+            if (product.getQuantity() == 0) continue;
+
+            product.setQuantity(product.getQuantity() - 1);
+
+        }
+    }
+
+    private void deductOriginal(OrderLine orderLine) {
+        int purchaseQuantity = orderLine.quantity();
+
+        for (Product product : orderLine.products()) {
+            int deductQuantity = getDeductQuantity(product, purchaseQuantity);
+            product.setQuantity(product.getQuantity() - deductQuantity);
+            purchaseQuantity -= deductQuantity;
+
+            if (purchaseQuantity <= 0) break;
+        }
+    }
+
+    private int getDeductQuantity(Product product, int purchaseQuantity) {
+        return Math.min(product.getQuantity(), purchaseQuantity);
+    }
+
     private int getPromotionQuantity(OrderLine orderLine, boolean getFree) {
         return orderLine.products().stream()
                 .filter(this::hasPromotion)
@@ -80,11 +117,24 @@ public class Inventory {
     private int calculatePromotionQuantity(Product product, int purchaseQuantity, boolean getFree) {
         Promotion promotion = product.getPromotion();
         int requiredQuantity = promotion.getBuy() + promotion.getGet();
-        int quantity = purchaseQuantity / requiredQuantity;
-        if (purchaseQuantity % requiredQuantity >= promotion.getBuy() && getFree) {
+        int quotient = getQuotient(product.getQuantity(), purchaseQuantity);
+        int quantity = quotient / requiredQuantity;
+        if (quotient % requiredQuantity >= promotion.getBuy() && getFree) {
             return quantity + 1;
         }
         return quantity;
+    }
+
+    private int getQuotient(int productStock, int purchaseQuantity) {
+        return Math.min(productStock, purchaseQuantity);
+    }
+
+    private boolean quantityIsNotAdded(Product product, int purchaseQuantity, int mapQuantity) {
+        Promotion promotion = product.getPromotion();
+        int requiredQuantity = promotion.getBuy() + promotion.getGet();
+        int quotient = getQuotient(product.getQuantity(), purchaseQuantity);
+
+        return (quotient / requiredQuantity) == mapQuantity;
     }
 
     private boolean hasPromotion(Product product) {
