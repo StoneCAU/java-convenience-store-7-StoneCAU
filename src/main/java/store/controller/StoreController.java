@@ -29,18 +29,25 @@ public class StoreController {
         OutputView.printWelcomeMessage();
 
         Inventory inventory = inventoryService.getInventory();
-        loadInventory(inventory);
 
-        Order order = getOrder(inventory);
-        Receipt receipt = getReceipt(order, inventory);
+        do {
+            loadInventory(inventory);
+            Order order = getOrder(inventory);
+            Receipt receipt = getReceipt(order, inventory);
+            OutputView.printReceipt(receipt);
+        } while (additionalPurchase());
+    }
+
+    private boolean additionalPurchase() {
+        return retryOnError(() -> Parser.parseResponse(InputView.inputAdditionalPurchase()));
     }
 
     private Receipt getReceipt(Order order, Inventory inventory) {
         order = getNewOrder(order, inventory);
-
         Map<String, Integer> addition = getAddition(order, inventory);
-
         boolean membershipDiscount = getMembershipDiscount();
+
+        inventory.update(order, addition);
 
         return Receipt.generate(order, addition, membershipDiscount);
     }
@@ -53,8 +60,9 @@ public class StoreController {
         List<OrderLine> newOrderLines = order.orderLines()
                 .stream()
                 .map(orderLine -> {
+                    boolean getFree = getFreeProduct(inventory, orderLine);
                     boolean purchase = getNotDiscount(inventory, orderLine);
-                    return orderService.getNewOrderLine(inventory, orderLine, purchase);
+                    return orderService.getNewOrderLine(inventory, orderLine, getFree, purchase);
                 })
                 .toList();
 
