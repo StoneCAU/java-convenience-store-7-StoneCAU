@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import store.domain.product.ProductFactory;
+import store.exception.ErrorMessage;
+import store.exception.StoreException;
 
 public class FileLoader {
     public static List<String> loadMarkdownFile(String fileName) {
@@ -15,7 +17,7 @@ public class FileLoader {
             return reader.lines().toList();
 
         } catch (IOException e) {
-            return List.of();
+            throw new StoreException(ErrorMessage.INVALID_FILE_CONTENT.getMessage());
         }
     }
 }
