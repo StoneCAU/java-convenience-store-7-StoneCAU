@@ -23,7 +23,7 @@ public class Inventory {
     }
 
     public void calculateAddition(Map<String, Integer> addition, OrderLine orderLine, boolean getFree) {
-        if (!isPromotionDay(orderLine.products().getFirst())) return;
+        if (isNotPromotionDay(orderLine.products().getFirst())) return;
 
         String productName = orderLine.products().getFirst().getName();
         int newQuantity = getPromotionQuantity(orderLine, getFree);
@@ -36,6 +36,14 @@ public class Inventory {
         return products.stream()
                 .filter(product -> product.getName().equals(name))
                 .collect(Collectors.toList());
+    }
+
+    public int getNotPromotionQuantity(OrderLine orderLine) {
+        return orderLine.products().stream()
+                .filter(this::hasPromotion)
+                .mapToInt(product -> calculateNotPromotionQuantity(product, orderLine.quantity()))
+                .findFirst()
+                .orElse(0);
     }
 
     public boolean isInvalidItem(String name) {
@@ -58,14 +66,6 @@ public class Inventory {
                 .filter(this::hasPromotion)
                 .filter(product -> sufficientQuantityForBenefit(product, orderLine.quantity()))
                 .anyMatch(product -> hasNotAdditionProduct(product, orderLine.quantity()));
-    }
-
-    public int getNotPromotionQuantity(OrderLine orderLine) {
-        return orderLine.products().stream()
-                .filter(this::hasPromotion)
-                .mapToInt(product -> calculateNotPromotionQuantity(product, orderLine.quantity()))
-                .findFirst()
-                .orElse(0);
     }
 
     public void update(Order order, Map<String, Integer> addition) {
@@ -147,14 +147,14 @@ public class Inventory {
         return product.getPromotion() != null;
     }
 
-    public boolean isPromotionDay(Product product) {
-        if (product.getPromotion() == null) return false;
+    public boolean isNotPromotionDay(Product product) {
+        if (product.getPromotion() == null) return true;
 
         LocalDate now = LocalDate.from(DateTimes.now());
         LocalDate start = product.getPromotion().getStart_date();
         LocalDate end = product.getPromotion().getEnd_date();
 
-        return !(now.isBefore(start) || now.isAfter(end));
+        return now.isBefore(start) || now.isAfter(end);
     }
 
     private boolean sufficientQuantityForBenefit(Product product, int purchasedQuantity) {
