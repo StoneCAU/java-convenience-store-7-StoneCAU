@@ -49,7 +49,8 @@ public class Inventory {
     public boolean promotionApplicable(OrderLine orderLine) {
         return orderLine.products().stream()
                 .filter(this::hasPromotion)
-                .anyMatch(product -> sufficientQuantityForBenefit(product, orderLine.quantity()));
+                .filter(product -> sufficientQuantityForBenefit(product, orderLine.quantity()))
+                .anyMatch(product -> hasNotAdditionProduct(product, orderLine.quantity()));
     }
 
     public int getNotPromotionQuantity(OrderLine orderLine) {
@@ -99,6 +100,14 @@ public class Inventory {
         return promotionStock - promotionStock % requiredQuantity > purchasedQuantity;
     }
 
+    private boolean hasNotAdditionProduct (Product product, int purchaseQuantity) {
+        Promotion promotion = product.getPromotion();
+        int buy = promotion.getBuy();
+        int requiredQuantity = promotion.getBuy() + promotion.getGet();
+        int discountQuantity = purchaseQuantity - requiredQuantity;
+
+        return purchaseQuantity == buy || (discountQuantity % requiredQuantity == 0 && purchaseQuantity > requiredQuantity);
+    }
 
     private int findQuantityByName(String name) {
         return products.stream()
