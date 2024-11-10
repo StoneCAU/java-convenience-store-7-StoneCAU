@@ -1,5 +1,7 @@
 package store.domain.promotion;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import store.util.FileLoader;
@@ -21,8 +23,8 @@ public class PromotionFactory {
         final String name = fields.get(0);
         final int buy = Integer.parseInt(fields.get(1));
         final int get = Integer.parseInt(fields.get(2));
-        final String start_date = fields.get(3);
-        final String end_date = fields.get(4);
+        final LocalDate start_date = dateFormatter(fields.get(3));
+        final LocalDate end_date = dateFormatter(fields.get(4));
 
         return new Promotion(name, buy, get, start_date, end_date);
     }
@@ -30,6 +32,11 @@ public class PromotionFactory {
     private List<String> getFields(String line) {
         return Arrays.stream(line.split(DELIMITER))
                 .toList();
+    }
+
+    private LocalDate dateFormatter(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(date, formatter);
     }
 
 }
