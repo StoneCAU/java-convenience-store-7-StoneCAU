@@ -1,5 +1,7 @@
 package store.domain.inventory;
 
+import camp.nextstep.edu.missionutils.DateTimes;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -139,6 +141,16 @@ public class Inventory {
 
     private boolean hasPromotion(Product product) {
         return product.getPromotion() != null;
+    }
+
+    public boolean isPromotionDay(Product product) {
+        if (product.getPromotion() == null) return false;
+
+        LocalDate now = LocalDate.from(DateTimes.now());
+        LocalDate start = product.getPromotion().getStart_date();
+        LocalDate end = product.getPromotion().getEnd_date();
+
+        return !(now.isBefore(start) || now.isAfter(end));
     }
 
     private boolean sufficientQuantityForBenefit(Product product, int purchasedQuantity) {
