@@ -39,12 +39,41 @@ public class Inventory {
         return findQuantityByName(name) < quantity;
     }
 
+    public boolean notPromotionApplicable(OrderLine orderLine) {
+        Product product = orderLine.products().getFirst();
+        int productStock = product.getQuantity();
+
+        return productStock < orderLine.quantity();
+    }
+
+    public boolean promotionApplicable(OrderLine orderLine) {
+        return orderLine.products().stream()
+                .filter(this::hasPromotion)
+                .anyMatch(product -> sufficientQuantityForBenefit(product, orderLine.quantity()));
+    }
+
+    public int getNotPromotionQuantity(OrderLine orderLine) {
+        return orderLine.products().stream()
+                .filter(this::hasPromotion)
+                .mapToInt(product -> calculateNotPromotionQuantity(product, orderLine.quantity()))
+                .findFirst()
+                .orElse(0);
+    }
+
     private int getPromotionQuantity(OrderLine orderLine, boolean getFree) {
         return orderLine.products().stream()
                 .filter(this::hasPromotion)
                 .mapToInt(product -> calculatePromotionQuantity(product, orderLine.quantity(), getFree))
                 .findFirst()
                 .orElse(0);
+    }
+
+    private int calculateNotPromotionQuantity(Product product, int purchaseQuantity) {
+        Promotion promotion = product.getPromotion();
+        int productStock = product.getQuantity();
+        int requiredQuantity = promotion.getBuy() + promotion.getGet();
+        int discountQuantity = productStock - productStock % requiredQuantity;
+        return purchaseQuantity - discountQuantity;
     }
 
     private int calculatePromotionQuantity(Product product, int purchaseQuantity, boolean getFree) {
@@ -57,20 +86,17 @@ public class Inventory {
         return quantity;
     }
 
-    public boolean promotionApplicable(OrderLine orderLine) {
-        return orderLine.products().stream()
-                .filter(this::hasPromotion)
-                .anyMatch(product -> inSufficientQuantityForBenefit(product, orderLine.quantity()));
-    }
-
     private boolean hasPromotion(Product product) {
         return product.getPromotion() != null;
     }
 
-    private boolean inSufficientQuantityForBenefit(Product product, int purchasedQuantity) {
-        int promotionStock = product.getQuantity();
+    private boolean sufficientQuantityForBenefit(Product product, int purchasedQuantity) {
+        Promotion promotion = product.getPromotion();
 
-        return promotionStock - purchasedQuantity >= 0;
+        int promotionStock = product.getQuantity();
+        int requiredQuantity = promotion.getBuy() + promotion.getGet();
+
+        return promotionStock - promotionStock % requiredQuantity > purchasedQuantity;
     }
 
 
