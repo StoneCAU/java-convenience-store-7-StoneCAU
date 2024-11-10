@@ -40,7 +40,13 @@ public class StoreController {
 
         Map<String, Integer> addition = getAddition(order, inventory);
 
-        return Receipt.generate(order, addition, true);
+        boolean membershipDiscount = getMembershipDiscount();
+
+        return Receipt.generate(order, addition, membershipDiscount);
+    }
+
+    private boolean getMembershipDiscount() {
+        return retryOnError(() -> Parser.parseResponse(InputView.inputMembershipDiscount()));
     }
 
     private Order getNewOrder(Order order, Inventory inventory) {
