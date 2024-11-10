@@ -67,7 +67,9 @@ public class Receipt {
             int afterPromotion = totalPrice - promotionDiscount;
             totalDiscount = (int) (afterPromotion * DISCOUNT);
 
-            if (totalDiscount > MAX_DISCOUNT_PRICE) totalDiscount = MAX_DISCOUNT_PRICE;
+            if (totalDiscount > MAX_DISCOUNT_PRICE) {
+                totalDiscount = MAX_DISCOUNT_PRICE;
+            }
         }
 
         return totalDiscount;

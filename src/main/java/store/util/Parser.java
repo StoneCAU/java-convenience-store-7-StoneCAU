@@ -30,7 +30,9 @@ public class Parser {
     }
 
     private static void validatePurchaseInput(String input) {
-        if (isNotMatch(input)) throw new StoreException(ErrorMessage.INVALID_FORMAT.getMessage());
+        if (isNotMatch(input)) {
+            throw new StoreException(ErrorMessage.INVALID_FORMAT.getMessage());
+        }
     }
 
     private static boolean isNotMatch(String input) {

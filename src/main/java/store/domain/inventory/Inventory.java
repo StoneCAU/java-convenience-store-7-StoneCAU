@@ -84,7 +84,6 @@ public class Inventory {
             if (product.getQuantity() == 0) continue;
 
             product.setQuantity(product.getQuantity() - 1);
-
         }
     }
 
@@ -125,9 +124,8 @@ public class Inventory {
         int requiredQuantity = promotion.getBuy() + promotion.getGet();
         int quotient = getQuotient(product.getQuantity(), purchaseQuantity);
         int quantity = quotient / requiredQuantity;
-        if (quotient % requiredQuantity >= promotion.getBuy() && getFree) {
-            return quantity + 1;
-        }
+        if (quotient % requiredQuantity >= promotion.getBuy() && getFree) return quantity + 1;
+
         return quantity;
     }
 
@@ -166,13 +164,14 @@ public class Inventory {
         return promotionStock - promotionStock % requiredQuantity > purchasedQuantity;
     }
 
-    private boolean hasNotAdditionProduct (Product product, int purchaseQuantity) {
+    private boolean hasNotAdditionProduct(Product product, int purchaseQuantity) {
         Promotion promotion = product.getPromotion();
         int buy = promotion.getBuy();
         int requiredQuantity = promotion.getBuy() + promotion.getGet();
         int discountQuantity = purchaseQuantity - requiredQuantity;
 
-        return purchaseQuantity == buy || (discountQuantity % requiredQuantity == 0 && purchaseQuantity > requiredQuantity);
+        return purchaseQuantity == buy || (discountQuantity % requiredQuantity == 0
+                && purchaseQuantity > requiredQuantity);
     }
 
     private int findQuantityByName(String name) {

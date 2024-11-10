@@ -48,7 +48,9 @@ public class Product {
     }
 
     private String formatting() {
-        if (isOutOfStock(quantity)) return outOfStockFormatting();
+        if (isOutOfStock(quantity)) {
+            return outOfStockFormatting();
+        }
         return inStockFormatting();
     }
 

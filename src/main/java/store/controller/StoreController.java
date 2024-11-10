@@ -111,7 +111,7 @@ public class StoreController {
     }
 
     private <T> T retryOnError(Supplier<T> supplier) {
-        while(true) {
+        while (true) {
             try {
                 return supplier.get();
             } catch (StoreException e) {

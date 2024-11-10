@@ -50,7 +50,8 @@ public class OutputView {
                 .forEach(orderLine -> {
                     Product product = orderLine.products().getFirst();
                     int price = orderLine.quantity() * product.getPrice();
-                    System.out.printf((RECEIPT_THREE_COLUMN), product.getName(), orderLine.quantity(), formatPrice(price));
+                    System.out.printf((RECEIPT_THREE_COLUMN), product.getName(), orderLine.quantity(),
+                            formatPrice(price));
                 });
     }
 
@@ -62,7 +63,8 @@ public class OutputView {
 
     private static void printPayment(Receipt receipt) {
         System.out.println(RECEIPT_SEPARATOR);
-        System.out.printf((RECEIPT_THREE_COLUMN), "총구매액", receipt.getTotalQuantity(), formatPrice(receipt.getTotalPrice()));
+        System.out.printf((RECEIPT_THREE_COLUMN), "총구매액", receipt.getTotalQuantity(),
+                formatPrice(receipt.getTotalPrice()));
         System.out.printf((RECEIPT_DISCOUNT), "행사할인", formatDiscount(receipt.getPromotionDiscount()));
         System.out.printf((RECEIPT_DISCOUNT), "멤버십할인", formatDiscount(receipt.getMembershipDiscount()));
         System.out.printf((RECEIPT_DISCOUNT), "내실돈", formatPrice(receipt.getFinalPayment()));
