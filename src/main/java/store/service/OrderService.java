@@ -14,6 +14,14 @@ public class OrderService {
         return makeAnOrder(items, inventory);
     }
 
+    public OrderLine getNewOrderLine(Inventory inventory, OrderLine orderLine, boolean purchase) {
+        if (!purchase) {
+            int notPromotionQuantity = inventory.getNotPromotionQuantity(orderLine);
+            return new OrderLine(orderLine.products(), orderLine.quantity() - notPromotionQuantity);
+        }
+        return new OrderLine(orderLine.products(), orderLine.quantity());
+    }
+
     private Order makeAnOrder(List<String> items, Inventory inventory) {
         return new Order(items.stream()
                 .map(item -> makeAnOrderLine(item, inventory))
