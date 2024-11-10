@@ -23,8 +23,12 @@ public class Inventory {
     }
 
     public void calculateAddition(Map<String, Integer> addition, OrderLine orderLine, boolean getFree) {
+        if (!isPromotionDay(orderLine.products().getFirst())) return;
+
         String productName = orderLine.products().getFirst().getName();
         int newQuantity = getPromotionQuantity(orderLine, getFree);
+        if (newQuantity == 0) return;
+
         addition.put(productName, newQuantity);
     }
 
