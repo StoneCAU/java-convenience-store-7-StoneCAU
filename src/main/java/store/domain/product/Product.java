@@ -3,11 +3,11 @@ package store.domain.product;
 import store.domain.promotion.Promotion;
 
 public class Product {
-    final String name;
-    final int price;
-    final int quantity;
-    final String promotionName;
-    final Promotion promotion;
+    private final String name;
+    private final int price;
+    private final String promotionName;
+    private final Promotion promotion;
+    private int quantity;
 
     public Product(String name, int price, int quantity, String promotionName, Promotion promotion) {
         this.name = name;
@@ -32,6 +32,11 @@ public class Product {
     public String getPromotionName() {
         return promotionName;
     }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
 
     public Promotion getPromotion() {
         return promotion;
