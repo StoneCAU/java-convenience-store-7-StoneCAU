@@ -2,6 +2,7 @@ package store.service;
 
 import java.util.List;
 import store.domain.inventory.Inventory;
+import store.domain.product.Product;
 import store.dto.Order;
 import store.dto.OrderLine;
 import store.exception.ErrorMessage;
@@ -14,7 +15,11 @@ public class OrderService {
         return makeAnOrder(items, inventory);
     }
 
-    public OrderLine getNewOrderLine(Inventory inventory, OrderLine orderLine, boolean purchase) {
+    public OrderLine getNewOrderLine(Inventory inventory, OrderLine orderLine, boolean getFree, boolean purchase) {
+        Product product = orderLine.products().getFirst();
+
+        if (!inventory.isPromotionDay(product)) return new OrderLine(orderLine.products(), orderLine.quantity());
+        if (getFree) return new OrderLine(orderLine.products(), orderLine.quantity() + 1);
         if (!purchase) {
             int notPromotionQuantity = inventory.getNotPromotionQuantity(orderLine);
             return new OrderLine(orderLine.products(), orderLine.quantity() - notPromotionQuantity);
