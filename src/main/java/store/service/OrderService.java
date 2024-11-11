@@ -55,5 +55,9 @@ public class OrderService {
         if (inventory.isExceedQuantity(name, quantity)) {
             throw new StoreException(ErrorMessage.EXCEED_QUANTITY.getMessage());
         }
+
+        if (quantity == 0) {
+            throw new StoreException(ErrorMessage.INVALID_ITEM_QUANTITY.getMessage());
+        }
     }
 }
