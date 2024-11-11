@@ -2,9 +2,7 @@ package store.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
 import java.util.List;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import store.domain.product.Product;
 import store.domain.product.ProductFactory;
@@ -22,6 +20,9 @@ public class ProductTest {
         List<Promotion> promotions = promotionFactory.initPromotions();
 
         // when
+        // 콜라,1000,10,탄산2+1
+        // 콜라,1000,10,null
+        // 오렌지주스,1800,9,MD추천상품
         List<Product> actual = productFactory.initProducts(promotions);
         List<Product> expected = List.of(
                 new Product("콜라", 1000, 10, "탄산2+1", promotions.getFirst()),

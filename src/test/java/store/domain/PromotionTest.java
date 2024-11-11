@@ -16,6 +16,8 @@ public class PromotionTest {
         final PromotionFactory promotionFactory = new PromotionFactory();
 
         // when
+        // 탄산2+1,2,1,2024-01-01,2024-12-31
+        // MD추천상품,1,1,2024-01-01,2024-12-31
         List<Promotion> actual = promotionFactory.initPromotions();
         List<Promotion> expected = List.of(
                 new Promotion("탄산2+1", 2, 1,
