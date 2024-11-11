@@ -17,14 +17,14 @@ public class PromotionTest {
 
         // when
         // 탄산2+1,2,1,2024-01-01,2024-12-31
-        // MD추천상품,1,1,2024-01-01,2024-12-31
+        // MD추천상품,1,1,2025-01-01,2025-12-31
         List<Promotion> actual = promotionFactory.initPromotions();
         List<Promotion> expected = List.of(
                 new Promotion("탄산2+1", 2, 1,
                 LocalDate.of(2024,1,1), LocalDate.of(2024,12,31)),
 
                 new Promotion("MD추천상품", 1, 1,
-                        LocalDate.of(2024,1,1), LocalDate.of(2024,12,31))
+                        LocalDate.of(2025,1,1), LocalDate.of(2025,12,31))
         );
 
         // then
